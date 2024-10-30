@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Three JS</title>
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+        /* overflow-x: hidden; */
+      }
+      canvas{
+        width: 100% !important;
+      }
+      #cube {
+        width: 100%;
+        margin: auto;
+        height: 550px;
+      }
+      .container {
+        width: 80%;
+        margin: auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+      }
+      .content {
+        width: 50%;
+
+        text-align: justify;
+        padding: 10px;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .container-images img {
+        /* width: 400px; */
+        height: 300px;
+      }
+      @media screen and (max-width: 1024px) {
+        .content {
+          width: 100%;
+        }
+        .container-images {
+          margin: auto;
+        }
+      }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@v0.168.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.168.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="cube"></div>
+    <h1 style="text-align: center">About US</h1>
+    <hr />
+    <div class="container">
+      <div class="content">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed dolorum
+        quis est vero quae ea asperiores? Quo sint ratione asperiores placeat,
+        minus quidem, rerum incidunt sequi illum consequatur laudantium dolore
+        dolorem quisquam vitae amet omnis corporis distinctio dicta sit
+        doloremque perferendis sed nulla tempora nihil? Quasi possimus quas
+        omnis tempora illo voluptate provident quod recusandae accusamus commodi
+        ex vel cum obcaecati, animi, natus iste earum harum. Impedit saepe ad
+        eaque iusto consequatur neque esse fuga, aperiam corrupti in ab sapiente
+        labore quasi explicabo quam repudiandae fugit ipsa hic molestias. Sed
+        maiores, ullam deleniti sit facilis cum, deserunt recusandae sapiente
+        molestias, obcaecati assumenda doloribus dolorem commodi modi
+        consequuntur voluptates fuga? Itaque quo fugiat qui aperiam veniam
+        cupiditate nisi odio id. Nobis, unde in! Voluptatem eos, minima, rerum
+        aspernatur, deleniti debitis porro blanditiis cupiditate voluptate quos
+        et voluptates necessitatibus? Consequuntur harum, voluptates eum vitae
+        libero laborum rem, voluptate, molestiae iste omnis quis eaque corrupti
+        exercitationem. Consequatur non possimus similique necessitatibus illum
+        ipsam totam, dolorum ratione. Labore, rem quae nemo illo culpa quia
+        commodi beatae accusantium quo quisquam soluta totam aperiam debitis
+        possimus doloribus similique, quod ducimus officiis saepe hic nulla
+        cumque minima autem ad. Officia dicta, voluptatem quia deleniti
+        dignissimos delectus odio?
+      </div>
+      <div class="container-images">
+        <img src="container-images-1.png" alt="comtainer images" />
+      </div>
+    </div>
+    <footer style="text-align: center">Algra Visuals Pvt Ltd@2024.</footer>
+  </body>
+  <script type="module">
+    import * as THREE from "three";
+    import WebGL from "three/addons/capabilities/WebGL.js";
+    import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
+    // const loader = new FontLoader();
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      50,
+      window.innerWidth / 550,
+      0.5,
+      1000
+    );
+    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+    const loaderglb = new GLTFLoader();
+
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, 550, false);
+    renderer.setClearColor(0x87ceeb);
+    document.getElementById("cube").appendChild(renderer.domElement);
+
+    //     const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    // const cube = new THREE.Mesh( geometry, material );
+    // scene.add( cube );
+
+    // camera.position.z = 5;
+    // Add lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Soft white light
+    scene.add(ambientLight);
+    const light = new THREE.DirectionalLight(0xffffff, 0.5);
+    light.position.set(5, 5, 5).normalize();
+    scene.add(light);
+    let model;
+    loaderglb.load(
+      "computer.glb",
+      function (glb) {
+        // console.log(glb);
+        model = glb.scene;
+        model.scale.set(0.9, 0.9, 0.9);
+        model.position.set(0, -3, 0);
+        scene.add(model);
+        camera.position.z = 5;
+      },
+      undefined,
+      function (error) {
+        console.log(error);
+      }
+    );
+    function animate() {
+      requestAnimationFrame(animate);
+      if (model) {
+        model.rotation.y += 0.01;
+      }
+      // model.rotation.z += 0.01;
+      renderer.render(scene, camera);
+    }
+
+    // function animate() {
+
+    //     cube.rotation.x += 0.01;
+    // 	cube.rotation.y += 0.01;
+    //     renderer.render( scene, camera );
+
+    // }
+
+    //create a text
+    // const textElm = new TextGeometry("SAURABH KUMAR",{
+    //     size:80
+    // });
+    // const textMaterial = new THREE.MeshBasicMaterial({color:0x0000ff })
+    // const textMesh = new THREE.Mesh(textElm,textMaterial);
+    // scene.add(textMesh);
+    // renderer.render( scene, camera );
+    if (WebGL.isWebGL2Available()) {
+      // renderer.render(scene,camera);
+      // renderer.setAnimationLoop(animate);
+      animate();
+    } else {
+      const warning = WebGL.getWebGL2ErrorMessage();
+      alert(warning);
+    }
+  </script>
+</html>
